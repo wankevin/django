@@ -14,11 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path, include
+from django.urls import path
 from real_time_system import views
+from kevin_webserver.consumer import ChatConsumer
 
 urlpatterns = [
     path('', views.view),
     path('test', views.get_late_data_from_database1)
 
 ]
+
+websocket_urlpatterns = [
+    path('ws/online_number/', ChatConsumer),
+]
+

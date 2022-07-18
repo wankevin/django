@@ -1,24 +1,40 @@
-from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.db import transaction
+from django.http import JsonResponse
 
-# Create your views here.
-
-# def hello_world(request: WSGIRequest):
-#     """
-#     requests : upload_telemetry.urls.py 轉過來的資料
-#     """
-#     return HttpResponse("Hello World!")
-
-
-from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.generics import GenericAPIView
 
 from upload_telemetry.models import InstrumentModels
 from upload_telemetry.serializers import InstrumentSerializer
 
 
-class InstrumentViews(viewsets.ModelViewSet):
+class InstrumentViews(GenericAPIView):
+    """
+    InstrumentSerializer 將資料進行 序列化
+    """
     queryset = InstrumentModels.objects.all()
     serializer_class = InstrumentSerializer
-    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        users = self.get_queryset()
+        serializer = self.serializer_class(users, many=True)
+        data = serializer.data
+        return JsonResponse(data, safe=False)
+
+    def post(self, request):
+        """
+        serializer.is_valid check data is model need
+        with transaction.atomic()  發生錯誤時會rollback
+        """
+        request_data = request.data
+        serializer = self.serializer_class(data=request_data)
+        if serializer.is_valid() is False:
+            return JsonResponse({"status": "fail"})
+
+        try:
+            with transaction.atomic():
+                serializer.save()
+                return JsonResponse({"status": "success"})
+
+        except Exception as e:
+            return JsonResponse({"status": e})
+

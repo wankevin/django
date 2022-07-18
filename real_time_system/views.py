@@ -12,7 +12,6 @@ def view(request):
 
     data = get_late_data_from_database(_filter="asdds5003")
     title = "yeee"
-    print(locals())
     return render(request, "show.html", locals())
 
 

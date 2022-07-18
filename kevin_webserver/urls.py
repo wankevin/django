@@ -14,14 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import path, include
-
-from real_time_system import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/upload_telemetry', include('upload_telemetry.urls')),
+    path('api/upload_telemetry/', include('upload_telemetry.urls')),
     path('show/', include('real_time_system.urls')),
-
 ]
+
