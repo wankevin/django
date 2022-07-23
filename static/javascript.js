@@ -1,31 +1,20 @@
-//function start_upload_telemetry(){
-//    $.ajax({
-//            url: 'http://192.168.0.3:8000/show/test',
-//            success: successFunction,
-//        })
-//};
-//
-//function successFunction(msg) {
-//        document.getElementById("temperature").textContent="Temperature : "+ msg.temperature
-//        document.getElementById("humidity").textContent="Humidity : "+ msg.humidity
-//        document.getElementById("datetime_now").textContent="Update Time :"+ msg.datetime
-//
-//    };
-//
-//
-//setInterval(start_upload_telemetry,1000);
+const room_name=document.getElementById("room_name").textContent;
 
-console.log(window.location.host + '/ws/online_number/');
-var socket = new WebSocket('ws://' + window.location.host + '/ws/online_number/');
+
+var socket = new WebSocket('ws://' + window.location.host + '/ws/real_time_status/'+room_name);
         socket.onopen = function(e){
               console.log ("open", e);
             }
         socket.onerror = function(e){
           console.log ("error", e)
         }
-        socket.onmessage = function(e){
-            var data = JSON.parse(e.data);
-            var message = data['message'];
-            console.log("message",e);
-            document.querySelector('#app').innerText = message;
+
+        socket.onmessage = function(message){
+            console.log(message);
+            var telemetry = JSON.parse(message.data);
+            document.getElementById("temperature").textContent="Temperature : "+ telemetry.temperature
+            document.getElementById("humidity").textContent="Humidity : "+ telemetry.humidity
+            document.getElementById("datetime_now").textContent="Update Time :"+ telemetry.datetime
+
+//            document.querySelector('#app').innerText = message;
         }

@@ -9,3 +9,4 @@ class InstrumentModels(models.Model):
     humidity = models.IntegerField()
     created_at = models.DateTimeField(auto_now=True)
 
+    objects = models.Manager()

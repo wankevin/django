@@ -73,6 +73,13 @@ WSGI_APPLICATION = 'kevin_webserver.wsgi.application'
 
 ASGI_APPLICATION = 'kevin_webserver.asgi.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+
+    },
+}
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 

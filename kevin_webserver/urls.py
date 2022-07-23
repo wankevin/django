@@ -18,7 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/upload_telemetry/', include('upload_telemetry.urls')),
+    path('api/upload/', include('upload_telemetry.urls')),
     path('show/', include('real_time_system.urls')),
 ]
 
